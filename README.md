@@ -1,2 +1,2 @@
 # WPDarkmode
-Wordpress Darkmode
+Wordpress Darkmode Plugin
