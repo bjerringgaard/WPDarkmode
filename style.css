@@ -1,3 +1,5 @@
+/* NIGHT MODE */
+
 body, .wp-core-ui .attachment-preview{
     background: #10161E !important;
 }
@@ -242,3 +244,4 @@ span.tablenav-pages-navspan.button.disabled{
     color: #797c7e !important;
     text-shadow: none !important;
 }
+

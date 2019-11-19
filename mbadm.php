@@ -21,7 +21,7 @@ class MBADarkMode
 
     // DarkMode Style Sheet  
     function DarkMode() {
-        $src = plugins_url( './style.css', __FILE__ );
+        $src = plugins_url( '/style.css', __FILE__ );
         wp_enqueue_style( 'DarkMode', $src, '');
     }
 
