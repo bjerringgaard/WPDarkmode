@@ -9,7 +9,8 @@
  * Text Domain: DarkMode-Plugin
  */
 
-
+// Security
+defined('ABSPATH') or die;
 
 class MBADarkMode
 {
@@ -21,7 +22,7 @@ class MBADarkMode
     // DarkMode Style Sheet  
     function DarkMode() {
         $src = plugins_url( './style.css', __FILE__ );
-        wp_enqueue_style( 'DarkMode', $src, '',);
+        wp_enqueue_style( 'DarkMode', $src, '');
     }
 
     // Activate in the Evening / Night
