@@ -16,11 +16,11 @@ class MBADarkMode
 {
     function __construct()
     {
-        // add_action('init' , array($this, 'dmEnable'));
-
-        add_action( 'admin_menu', array($this, 'createMenuItem'));
-
+        // Admin Init
         add_action( 'admin_init', array($this, 'darkModeSettingsPage'));
+
+        // Admin Menu 
+        add_action( 'admin_menu', array($this, 'createMenuItem'));
 
         add_action ('admin_menu', array($this, 'DarkModeAlwaysEnable'));
 
@@ -108,7 +108,7 @@ class MBADarkMode
     }
 
 
-    // Activate in the Evening / Night
+    // Timed Activation
     function DarkmodeTimedEnable() 
     {
         if( get_option('dmtimedenableplugin') == 1 ) {
@@ -123,6 +123,7 @@ class MBADarkMode
         }   
     }
 
+    // Always Enable 
     function DarkModeAlwaysEnable(){
         {
             if(get_option('dmalwaysenableplugin') == 1)
