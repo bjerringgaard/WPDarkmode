@@ -22,44 +22,63 @@ class MBADarkMode
 
         add_action( 'admin_init', array($this, 'darkModeSettingsPage'));
 
-        add_action ('admin_menu', array($this, 'DarkmodeUser'));
+        add_action ('admin_menu', array($this, 'DarkModeAlwaysEnable'));
+
+        add_action ('admin_menu', array($this, 'DarkmodeTimedEnable'));
     }
 
     function darkModeSettingsPage() {
-        add_settings_section(
-            'mbadarkmode',
-            'Darkmode Settings',
-             null,
-            'dmplugin'
-        );
+        add_settings_section('mbadmplugin', 'Darkmode Settings', null, 'mba-DarkMode');
 
-        register_setting(
-            'mbadarkmode',
-            'mbadarkmodeplugin'
-        );
+        // Always Enable Darkmode
+        register_setting( 'mbadmplugin','dmalwaysenableplugin', 'esc_attr');
+        add_settings_field('dmalwaysenableplugin', 'Always Enable Darkmode', array($this, 'alwaysEnableDarkMode'), 'mba-DarkMode','mbadmplugin');
 
-        add_settings_field( 
-            'mbadarkmodeplugin',
-            'Enable Darkmode',
-            array($this, 'enableDarkMode'),
-            'dmplugin',
-            'mbadarkmode',
-        );
+        // Enable Timed Darkmode
+        register_setting( 'mbadmplugin','dmtimedenableplugin', 'esc_attr');
+        add_settings_field('dmtimedenableplugin', 'Enable Timed Darkmode', array($this, 'timedEnableDarkMode'), 'mba-DarkMode','mbadmplugin');
+
+        // Darkmode Start Time
+        register_setting( 'mbadmplugin', 'dmstarttimeplugin', 'esc_attr');
+        add_settings_field('dmstarttimeplugin', 'Darkmode Starting time', array($this, 'darkModeStartTimer'), 'mba-DarkMode', 'mbadmplugin',);
+
+        // Darkmode End Time
+        register_setting( 'mbadmplugin', 'dmendtimeplugin', 'esc_attr');
+        add_settings_field('dmendtimeplugin', 'Darkmode Ending time', array($this, 'darkModeEndTimer'), 'mba-DarkMode', 'mbadmplugin',);
     }
 
-    function enableDarkMode() {
-        echo '<input type="checkbox" name="mbadarkmodeplugin" value="1"
-        ' . checked(1 , get_option('mbadarkmodeplugin') , false) . '>';
+    // Always Enable Darkmode
+    function alwaysEnableDarkMode() {
+        echo '<input type="checkbox" name="dmalwaysenableplugin" value="1"
+        ' . checked(1 , get_option('dmalwaysenableplugin') , false) . '>';
     }
+
+    // Enable Darkmode
+    function timedEnableDarkMode() {
+        echo '<input type="checkbox" name="dmtimedenableplugin" value="1"
+        ' . checked(1 , get_option('dmtimedenableplugin') , false) . '>';
+    }
+
+    // Darkmode Start Time
+    function darkModeStartTimer() {
+         $startvalue = get_option('dmstarttimeplugin');
+        echo "<input name='dmstarttimeplugin' type='number' value='{$startvalue}'>";
+    }
+
+    // Darkmode End Time
+    function darkModeEndTimer() {
+        $endvalue = get_option('dmendtimeplugin');
+       echo "<input name='dmendtimeplugin' type='number' value='{$endvalue}'>";
+   }
 
     function createMenuItem() 
     {
         add_submenu_page(
-            'options-general.php',                // Where to add the file 
-            'MbaDarkmodeSettings',                //Title
-            'MBA DarkMode',                        //menu item name 
-            'manage_options',                     //Compatibilities
-            'dmplugin',                       //Identifier
+            'options-general.php',
+            'MbaDarkmodeSettings',         
+            'MBA DarkMode',                 
+            'manage_options',                
+            'mba-DarkMode',                       
 
             array($this , 'settingsPage')
         );
@@ -73,22 +92,14 @@ class MBADarkMode
              <form method="post" action="options.php">'
         ;
 
-            do_settings_sections( 'dmplugin' );
-            settings_fields( 'mbadarkmode' );
+            do_settings_sections( 'mba-DarkMode' );
+            settings_fields( 'mbadmplugin' );
             submit_button(  );
 
         echo 
             '</form></div>'
         ;
     }
-/*
-    function DarkmodeUser(){
-        {
-            if(get_option('mbadarkmodeplugin') == 1)
-            remove_menu_page('index.php');
-        }
-    }
-*/
 
     // DarkMode Style Sheet  
     function DarkMode() {
@@ -96,35 +107,28 @@ class MBADarkMode
         wp_enqueue_style( 'DarkMode', $src, '');
     }
 
-    /*
 
     // Activate in the Evening / Night
-    function dmEnable() 
+    function DarkmodeTimedEnable() 
     {
-        add_action('admin_enqueue_scripts' ,array($this, 'DarkMode')); //testing
+        if( get_option('dmtimedenableplugin') == 1 ) {
+            $time = date('H', time());
+            if( $time >= get_option('dmstarttimeplugin') && $time <= "24") {
+                add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
+            }
+            
+            else if($time <= get_option('dmendtimeplugin')) {
+                add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
+            }
+        }   
+    }
 
-        $time = date('H', time());
-        if( $time >= "18" && $time <= "24") {
-            add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
-        }
-        
-        else if($time <= "7") {
-            add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
-        }
-    }*/
-
-    function DarkmodeUser(){
+    function DarkModeAlwaysEnable(){
         {
-            if(get_option('mbadarkmodeplugin') == 1)
+            if(get_option('dmalwaysenableplugin') == 1)
             add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
         }
     }
 
 } 
-
-
-
-
 $MBAdmObj = new MBADarkMode();
-
-
