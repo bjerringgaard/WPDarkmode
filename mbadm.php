@@ -29,8 +29,8 @@ class MBADarkMode
         add_settings_section(
             'mbadarkmode',
             'Darkmode Settings',
-            null,
-            'mba-DarkMode'
+             null,
+            'dmplugin'
         );
 
         register_setting(
@@ -42,7 +42,7 @@ class MBADarkMode
             'mbadarkmodeplugin',
             'Enable Darkmode',
             array($this, 'enableDarkMode'),
-            'mba-Darkmode',
+            'dmplugin',
             'mbadarkmode',
         );
     }
@@ -57,9 +57,9 @@ class MBADarkMode
         add_submenu_page(
             'options-general.php',                // Where to add the file 
             'MbaDarkmodeSettings',                //Title
-            'MbaDarkmode',                        //menu item name 
+            'MBA DarkMode',                        //menu item name 
             'manage_options',                     //Compatibilities
-            'mba-DarkMode',                       //Identifier
+            'dmplugin',                       //Identifier
 
             array($this , 'settingsPage')
         );
@@ -73,7 +73,7 @@ class MBADarkMode
              <form method="post" action="options.php">'
         ;
 
-            do_settings_sections( 'mba-DarkMode' );
+            do_settings_sections( 'dmplugin' );
             settings_fields( 'mbadarkmode' );
             submit_button(  );
 
@@ -102,6 +102,8 @@ class MBADarkMode
     // Activate in the Evening / Night
     function dmEnable() 
     {
+        add_action('admin_enqueue_scripts' ,array($this, 'DarkMode')); //testing
+
         $time = date('H', time());
         if( $time >= "18" && $time <= "24") {
             add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
