@@ -112,8 +112,8 @@ class MBADarkMode
     function DarkmodeTimedEnable() 
     {
         if( get_option('dmtimedenableplugin') == 1 ) {
-            $time = date('H', time());
-            if( $time >= get_option('dmstarttimeplugin') && $time <= "24") {
+            $time = date('H', strtotime('+1 hour')); //Dunno why i have to add an hour, but otherwise its lagging an hour behind
+            if( $time >= get_option('dmstarttimeplugin') && $time <= "23") {
                 add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
             }
             
