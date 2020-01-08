@@ -16,7 +16,7 @@ class MBADarkMode
 {
     function __construct()
     {
-        add_action('init' , array($this, 'dmEnable'));
+        // add_action('init' , array($this, 'dmEnable'));
 
         add_action( 'admin_menu', array($this, 'createMenuItem'));
 
@@ -81,23 +81,22 @@ class MBADarkMode
             '</form></div>'
         ;
     }
-
+/*
     function DarkmodeUser(){
         {
             if(get_option('mbadarkmodeplugin') == 1)
             remove_menu_page('index.php');
         }
     }
-
-
-
-
+*/
 
     // DarkMode Style Sheet  
     function DarkMode() {
         $src = plugins_url( '/style.css', __FILE__ );
         wp_enqueue_style( 'DarkMode', $src, '');
     }
+
+    /*
 
     // Activate in the Evening / Night
     function dmEnable() 
@@ -112,8 +111,19 @@ class MBADarkMode
         else if($time <= "7") {
             add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
         }
+    }*/
+
+    function DarkmodeUser(){
+        {
+            if(get_option('mbadarkmodeplugin') == 1)
+            add_action('admin_enqueue_scripts' ,array($this, 'DarkMode'));
+        }
     }
-}
+
+} 
+
+
+
 
 $MBAdmObj = new MBADarkMode();
 
